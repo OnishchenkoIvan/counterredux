@@ -2,12 +2,20 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Setter } from "./components/Setter/Setter";
 import { Counter } from "./components/Counter/Counter";
+import { useDispatch, useSelector } from "react-redux";
+import { AppStateType } from "./bll/store";
+import { incValueAC, resetValueAC } from "./bll/counter-reducer";
 
 let maxValue = 5;
 let startValue = 0;
 
 function App() {
-  const [count, setCount] = useState<number>(startValue);
+  const count = useSelector<AppStateType, number>(
+    (state) => state.counter.value
+  );
+
+  const dispatch = useDispatch();
+
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -23,16 +31,16 @@ function App() {
   }, [count]);
 
   const Increment = () => {
-    setCount(count + 1);
+    dispatch(incValueAC());
   };
 
   const Reset = () => {
-    setCount(startValue);
+    dispatch(resetValueAC());
   };
 
   return (
     <div className="App">
-      <Setter setCount={setCount} setError={setError} />
+      {/*<Setter setCount={setCount} setError={setError} />*/}
       <Counter
         error={error}
         countCurrent={count}

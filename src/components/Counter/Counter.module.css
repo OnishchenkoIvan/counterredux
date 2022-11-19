@@ -1,0 +1,40 @@
+.container {
+    width: 350px;
+    min-height: 230px;
+    border: 3px solid #1cb9c5;
+    border-radius: 5px;
+}
+
+.count {
+    border: 3px solid #1cb9c5;
+    border-radius: 4px;
+    color: #1cb9c5;
+    font-weight: 700;
+    margin: 15px;
+    text-align: center;
+    font-size: 50px;
+    padding: 30px 0;
+}
+.count span {
+    font-size: 22px;
+    color: red;
+    font-weight: 800;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-evenly;
+    border: 3px solid #1cb9c5;
+    border-radius: 4px;
+    margin: 15px;
+    padding: 10px;
+}
+
+.buttons button {
+    font-size: 30px;
+    color: #2c3748;
+    font-weight: 700;
+    padding: 0 10px 0 10px;
+    border-radius: 10px;
+    background-color: #1cb9c5;
+}
