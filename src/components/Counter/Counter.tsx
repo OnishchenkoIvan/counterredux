@@ -7,6 +7,8 @@ import { AppStateType } from "../../bll/store";
 import { incValueAC, resetValueAC } from "../../bll/counter-reducer";
 
 export const Counter = () => {
+  const dispatch = useDispatch();
+
   const count = useSelector<AppStateType, number>(
     (state) => state.counter.value
   );
@@ -15,15 +17,6 @@ export const Counter = () => {
     (state) => state.setter.error
   );
 
-  const dispatch = useDispatch();
-  const Increment = () => {
-    dispatch(incValueAC());
-  };
-
-  const Reset = () => {
-    dispatch(resetValueAC());
-  };
-
   const countMax = useSelector<AppStateType, number>(
     (state) => state.setter.countMax
   );
@@ -31,6 +24,14 @@ export const Counter = () => {
   const countStart = useSelector<AppStateType, number>(
     (state) => state.setter.countStart
   );
+
+  const Increment = () => {
+    dispatch(incValueAC());
+  };
+
+  const Reset = () => {
+    dispatch(resetValueAC(countStart));
+  };
 
   return (
     <div>
@@ -41,8 +42,6 @@ export const Counter = () => {
           ) : (
             <span>{error}</span>
           )}
-          {/*<UniversalDisplay count={countCurrent} countMax={countMax} />*/}
-          {/*{error && <span>{error}</span>}*/}
         </div>
         <div className={s.buttons}>
           <UniversalButton

@@ -5,6 +5,7 @@ type UniversalInputPropsType = {
   placeholder: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   className: string;
+  // value: number;
 };
 
 export const UniversalInput = (props: UniversalInputPropsType) => {
@@ -15,6 +16,7 @@ export const UniversalInput = (props: UniversalInputPropsType) => {
       placeholder={placeholder}
       onChange={onChange}
       className={className}
+      // value={value}
     />
   );
 };

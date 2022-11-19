@@ -1,5 +1,6 @@
 import { Dispatch } from "redux";
 import { AppStateType } from "./store";
+import { incValueAC } from "./counter-reducer";
 
 type SetMaxValueActionType = ReturnType<typeof setMaxValueAC>;
 type SetMinValueActionType = ReturnType<typeof setMinValueAC>;
@@ -10,9 +11,12 @@ type ActionType =
   | SetMinValueActionType
   | SetErrorActionType;
 
+export const start = localStorage.getItem("startValue") || "0";
+const max = localStorage.getItem("maxValue") || "5";
+
 const initialState = {
-  countStart: 0,
-  countMax: 5,
+  countStart: JSON.parse(start),
+  countMax: JSON.parse(max),
   error: "",
 };
 
@@ -51,18 +55,3 @@ export const setMinValueAC = (value: number) =>
 
 export const setErrorAC = (value: string) =>
   ({ type: "SET-ERROR", value } as const);
-
-// export const incValueTC =
-//   () => (dispatch: Dispatch, getState: () => AppStateType) => {
-//     let currentValue = getState().counter.value;
-//     localStorage.setItem("counterValue", JSON.stringify(currentValue + 1));
-//     dispatch(incValueAC());
-//   };
-//
-// export const setValueFromLocalStorageTC = () => (dispatch: Dispatch) => {
-//   let valueAsString = localStorage.getItem("counterValue");
-//   if (valueAsString) {
-//     let newValue = JSON.parse(valueAsString);
-//     dispatch(setValueFromLocalStorageAC(newValue));
-//   }
-// };

@@ -9,6 +9,7 @@ import {
   setMaxValueAC,
   setMinValueAC,
 } from "../../bll/set-reducer";
+import { resetValueAC } from "../../bll/counter-reducer";
 
 export const Setter = () => {
   const dispatch = useDispatch();
@@ -32,6 +33,7 @@ export const Setter = () => {
     } else {
       localStorage.setItem("startValue", JSON.stringify(startValue));
       localStorage.setItem("maxValue", JSON.stringify(maxValue));
+      dispatch(resetValueAC(startValue));
       // dispatch(setMaxValueAC(maxValue));
       // dispatch(setMinValueAC(startValue));
     }
@@ -44,12 +46,10 @@ export const Setter = () => {
     }
     if (maxValue === null || startValue === null) {
       dispatch(setErrorAC("Incorrect start or max value"));
-
       return true;
     }
     if (maxValue <= 0 || startValue < 0) {
       dispatch(setErrorAC("Value must be above zero"));
-
       return true;
     }
     return false;
@@ -57,14 +57,12 @@ export const Setter = () => {
 
   const handleChangeMaxValue = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(setErrorAC(""));
-
     const value = Number(e.currentTarget.value);
     dispatch(setMaxValueAC(value));
   };
 
   const handleChangeStartValue = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(setErrorAC(""));
-
     const value = Number(e.currentTarget.value);
     dispatch(setMinValueAC(value));
   };
