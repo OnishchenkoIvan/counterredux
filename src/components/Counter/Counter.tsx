@@ -1,32 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import { UniversalDisplay } from "../UniversalDisplay/UniversalDisplay";
 import { UniversalButton } from "../UniversalButton/UniversalButton";
 import s from "./Counter.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { AppStateType } from "../../bll/store";
+import { incValueAC, resetValueAC } from "../../bll/counter-reducer";
 
-type CounterPropsType = {
-  countCurrent: number;
-  onClickIncrement: () => void;
-  onClickReset: () => void;
-  countMax: number;
-  countStart: number;
-  error: string | null;
-};
+export const Counter = () => {
+  const count = useSelector<AppStateType, number>(
+    (state) => state.counter.value
+  );
 
-export const Counter = (props: CounterPropsType) => {
-  const {
-    countStart,
-    countMax,
-    countCurrent,
-    onClickReset,
-    onClickIncrement,
-    error,
-  } = props;
+  const error = useSelector<AppStateType, string>(
+    (state) => state.setter.error
+  );
+
+  const dispatch = useDispatch();
+  const Increment = () => {
+    dispatch(incValueAC());
+  };
+
+  const Reset = () => {
+    dispatch(resetValueAC());
+  };
+
+  const countMax = useSelector<AppStateType, number>(
+    (state) => state.setter.countMax
+  );
+
+  const countStart = useSelector<AppStateType, number>(
+    (state) => state.setter.countStart
+  );
+
   return (
     <div>
       <div className={s.container}>
         <div className={s.count}>
           {!error ? (
-            <UniversalDisplay count={countCurrent} countMax={countMax} />
+            <UniversalDisplay count={count} countMax={countMax} />
           ) : (
             <span>{error}</span>
           )}
@@ -35,14 +46,14 @@ export const Counter = (props: CounterPropsType) => {
         </div>
         <div className={s.buttons}>
           <UniversalButton
-            onClickHandler={onClickIncrement}
-            disabled={countCurrent === countMax}
+            onClickHandler={Increment}
+            disabled={count === countMax}
             title="Increment"
           ></UniversalButton>
           <UniversalButton
-            onClickHandler={onClickReset}
+            onClickHandler={Reset}
             title="Reset"
-            disabled={countCurrent === countStart}
+            disabled={count === countStart}
           ></UniversalButton>
         </div>
       </div>

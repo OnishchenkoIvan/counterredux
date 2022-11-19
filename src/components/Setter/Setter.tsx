@@ -2,53 +2,71 @@ import React, { ChangeEvent, useState } from "react";
 import { UniversalButton } from "../UniversalButton/UniversalButton";
 import s from "./Setter.module.css";
 import { UniversalInput } from "../UniversalInput/UniversalInput";
+import { useDispatch, useSelector } from "react-redux";
+import { AppStateType } from "../../bll/store";
+import {
+  setErrorAC,
+  setMaxValueAC,
+  setMinValueAC,
+} from "../../bll/set-reducer";
 
-type SetterPropsType = {
-  setCount: (value: number) => void;
-  setError: (value: string | null) => void;
-};
+export const Setter = () => {
+  const dispatch = useDispatch();
 
-export const Setter = (props: SetterPropsType) => {
-  const { setCount, setError } = props;
-  const [maxValue, setMaxValue] = useState<number>(0);
-  const [startValue, setStartValue] = useState<number>(0);
+  const maxValue = useSelector<AppStateType, number>(
+    (state) => state.setter.countMax
+  );
+  const startValue = useSelector<AppStateType, number>(
+    (state) => state.setter.countStart
+  );
+
+  // let startValue: number, maxValue: number;
+  // const [error, setError] = useState<string | null>(null);
+
+  // const [maxValue, setMaxValue] = useState<number>(0);
+  // const [startValue, setStartValue] = useState<number>(0);
 
   const onClickSetter = () => {
     if (!Number.isInteger(startValue) || !Number.isInteger(maxValue)) {
-      setError("Value must be ceil number");
+      dispatch(setErrorAC("Value must be ceil number"));
     } else {
       localStorage.setItem("startValue", JSON.stringify(startValue));
       localStorage.setItem("maxValue", JSON.stringify(maxValue));
-      setCount(startValue);
+      // dispatch(setMaxValueAC(maxValue));
+      // dispatch(setMinValueAC(startValue));
     }
   };
 
   const disabledSetter = (): boolean => {
     if (maxValue <= startValue) {
-      setError("Incorrect start or max value");
+      dispatch(setErrorAC("Incorrect start or max value"));
       return true;
     }
     if (maxValue === null || startValue === null) {
-      setError("Incorrect start or max value");
+      dispatch(setErrorAC("Incorrect start or max value"));
+
       return true;
     }
     if (maxValue <= 0 || startValue < 0) {
-      setError("Value must be above zero");
+      dispatch(setErrorAC("Value must be above zero"));
+
       return true;
     }
     return false;
   };
 
   const handleChangeMaxValue = (e: ChangeEvent<HTMLInputElement>) => {
-    setError(null);
+    dispatch(setErrorAC(""));
+
     const value = Number(e.currentTarget.value);
-    setMaxValue(value);
+    dispatch(setMaxValueAC(value));
   };
 
   const handleChangeStartValue = (e: ChangeEvent<HTMLInputElement>) => {
-    setError(null);
+    dispatch(setErrorAC(""));
+
     const value = Number(e.currentTarget.value);
-    setStartValue(value);
+    dispatch(setMinValueAC(value));
   };
 
   const blocked = disabledSetter() ? `${s.blocked}` : "";
