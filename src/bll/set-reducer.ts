@@ -1,6 +1,4 @@
 import { Dispatch } from "redux";
-import { AppStateType } from "./store";
-import { incValueAC } from "./counter-reducer";
 
 type SetMaxValueActionType = ReturnType<typeof setMaxValueAC>;
 type SetMinValueActionType = ReturnType<typeof setMinValueAC>;
@@ -55,3 +53,7 @@ export const setMinValueAC = (value: number) =>
 
 export const setErrorAC = (value: string) =>
   ({ type: "SET-ERROR", value } as const);
+
+export const setMaxValueTC = (value: number) => (dispatch: Dispatch) => {
+  dispatch(setMaxValueAC(value));
+};

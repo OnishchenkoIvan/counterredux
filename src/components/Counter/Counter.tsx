@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { UniversalDisplay } from "../UniversalDisplay/UniversalDisplay";
 import { UniversalButton } from "../UniversalButton/UniversalButton";
 import s from "./Counter.module.css";
@@ -8,6 +8,12 @@ import { incValueAC, resetValueAC } from "../../bll/counter-reducer";
 
 export const Counter = () => {
   const dispatch = useDispatch();
+  const startValueFromLocalStorage = JSON.parse(
+    localStorage.getItem("startValue") || "0"
+  );
+  const maxValueFromLocalStorage = JSON.parse(
+    localStorage.getItem("maxValue") || "5"
+  );
 
   const count = useSelector<AppStateType, number>(
     (state) => state.counter.value
@@ -32,13 +38,16 @@ export const Counter = () => {
   const Reset = () => {
     dispatch(resetValueAC(countStart));
   };
-
+  console.log({ count, countMax });
   return (
     <div>
       <div className={s.container}>
         <div className={s.count}>
           {!error ? (
-            <UniversalDisplay count={count} countMax={countMax} />
+            <UniversalDisplay
+              count={count}
+              countMax={maxValueFromLocalStorage}
+            />
           ) : (
             <span>{error}</span>
           )}
@@ -46,13 +55,13 @@ export const Counter = () => {
         <div className={s.buttons}>
           <UniversalButton
             onClickHandler={Increment}
-            disabled={count === countMax}
+            disabled={count === maxValueFromLocalStorage}
             title="Increment"
           ></UniversalButton>
           <UniversalButton
             onClickHandler={Reset}
             title="Reset"
-            disabled={count === countStart}
+            disabled={count === startValueFromLocalStorage}
           ></UniversalButton>
         </div>
       </div>

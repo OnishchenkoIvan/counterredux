@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent } from "react";
 import { UniversalButton } from "../UniversalButton/UniversalButton";
 import s from "./Setter.module.css";
 import { UniversalInput } from "../UniversalInput/UniversalInput";
@@ -10,6 +10,12 @@ import {
   setMinValueAC,
 } from "../../bll/set-reducer";
 import { resetValueAC } from "../../bll/counter-reducer";
+import { AnyAction } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+
+export type AppDispatch = ThunkDispatch<AppStateType, unknown, AnyAction>;
+
+export const useAppDispatch: () => AppDispatch = useDispatch;
 
 export const Setter = () => {
   const dispatch = useDispatch();
@@ -21,12 +27,18 @@ export const Setter = () => {
     (state) => state.setter.countStart
   );
 
-  // let startValue: number, maxValue: number;
-  // const [error, setError] = useState<string | null>(null);
-
-  // const [maxValue, setMaxValue] = useState<number>(0);
-  // const [startValue, setStartValue] = useState<number>(0);
-
+  const startValueFromLocalStorage = JSON.parse(
+    localStorage.getItem("startValue") || "0"
+  );
+  const maxValueFromLocalStorage = JSON.parse(
+    localStorage.getItem("maxValue") || "5"
+  );
+  console.log({
+    startValueFromLocalStorage,
+    maxValueFromLocalStorage,
+    startValue,
+    maxValue,
+  });
   const onClickSetter = () => {
     if (!Number.isInteger(startValue) || !Number.isInteger(maxValue)) {
       dispatch(setErrorAC("Value must be ceil number"));
@@ -34,8 +46,6 @@ export const Setter = () => {
       localStorage.setItem("startValue", JSON.stringify(startValue));
       localStorage.setItem("maxValue", JSON.stringify(maxValue));
       dispatch(resetValueAC(startValue));
-      // dispatch(setMaxValueAC(maxValue));
-      // dispatch(setMinValueAC(startValue));
     }
   };
 
@@ -80,6 +90,7 @@ export const Setter = () => {
               placeholder="max value"
               onChange={handleChangeMaxValue}
               className={blocked}
+              value={maxValue}
             />
           </span>
           <span>
@@ -89,6 +100,7 @@ export const Setter = () => {
               placeholder="start value"
               onChange={handleChangeStartValue}
               className={blocked}
+              value={startValue}
             />
           </span>
         </div>
@@ -100,7 +112,6 @@ export const Setter = () => {
           ></UniversalButton>
         </div>
       </div>
-      {/*{error && <span style={{ color: "red" }}>{error}</span>}*/}
     </div>
   );
 };
